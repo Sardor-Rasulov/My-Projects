@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.entity.Dairy;
+import com.example.project.entity.FruitsAndVegetables;
 import com.example.project.service.DairyService;
 
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -48,6 +50,48 @@ public class DairyController {
 		
 		return result;
 	}
+	
+	/* Update product quantity */
+	@PostMapping("/updateDairyQuantity")
+	public Map<String, Object> updateQuantity(@RequestParam (name="id") Long id,
+											  @RequestParam (name="productQuantity") Float quantity){
+		
+		Map<String, Object> res = new HashMap<>(); 
+		
+		try {
+			
+			/* Get product by id */
+			Dairy dairy = new Dairy();
+			dairy = dService.getById(id);
+			Float quantityInDb = dairy.getProductQuantity();
+			
+			/*
+			 * Check if amount which comes from user 
+			 * is lesser than the amount in DB
+			 */ 
+			if(quantity < quantityInDb) {
+				
+				Float quntityRes = quantityInDb - quantity;
+				
+				dairy.setProductQuantity(quntityRes);
+				dService.updateQuantity(dairy);
+				
+				res.put("fruitsAndVegs", dairy);
+				res.put("status", 0);
+
+			} else {
+				res.put("msg", "You don't have enough product");
+			}
+			
+		}catch (Exception e) {
+			
+			res.put("status", 1);
+			res.put("msg", "Somethig went wrong! \\n There is an exception");
+		}
+		
+		return res;
+	}
+
 	
 	/* Get All Dairy */
 	@GetMapping("/getAllDairy")
