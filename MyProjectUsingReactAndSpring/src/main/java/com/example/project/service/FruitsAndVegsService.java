@@ -20,4 +20,12 @@ public class FruitsAndVegsService {
 	public Iterable<FruitsAndVegetables> getAllFruitsAndVegs(){
 		return fvRepo.findAll();
 	}
+	
+	public FruitsAndVegetables getById(Long id) {
+		return fvRepo.findById(id).get();
+	}
+	
+	public void updateQuantity(FruitsAndVegetables productQuantity) {
+		fvRepo.save(productQuantity);
+	}
 }
