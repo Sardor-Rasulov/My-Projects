@@ -26,7 +26,7 @@ public class Dairy {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 	public String productName;
-	public Long productQuantity;
+	public Float productQuantity;
 	public String purchaseDate;
 	public String expirationDate;
 }

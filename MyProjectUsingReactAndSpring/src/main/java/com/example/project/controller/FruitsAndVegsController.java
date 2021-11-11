@@ -53,7 +53,7 @@ public class FruitsAndVegsController {
 
 	
 	//Update product quantity
-	@PostMapping("/updateQuantity")
+	@PostMapping("/updateFruitsAndVegsQuantity")
 	public Map<String, Object> updateQuantity(@RequestParam (name="id") Long id,
 											  @RequestParam (name="productQuantity") Float quantity){
 		
@@ -61,6 +61,7 @@ public class FruitsAndVegsController {
 		
 		try {
 			
+			/* Get product by id */
 			FruitsAndVegetables fruitsAndVegs = new FruitsAndVegetables();
 			fruitsAndVegs = fAndvService.getById(id);
 			Float quantityInDb = fruitsAndVegs.getProductQuantity();

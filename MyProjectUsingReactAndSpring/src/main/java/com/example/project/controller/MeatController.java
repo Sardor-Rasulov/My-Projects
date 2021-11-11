@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.project.entity.Dairy;
 import com.example.project.entity.Meat;
 import com.example.project.service.MeatService;
 
@@ -57,6 +59,48 @@ public class MeatController {
 		
 		return res;
 	}
+	
+	/* Update product quantity */
+	@PostMapping("/updateMeatQuantity")
+	public Map<String, Object> updateQuantity(@RequestParam (name="id") Long id,
+											  @RequestParam (name="productQuantity") Float quantity){
+		
+		Map<String, Object> res = new HashMap<>(); 
+		
+		try {
+			
+			/* Get product by id */
+			Meat meat = new Meat();
+			meat = mService.getById(id);
+			Float quantityInDb = meat.getProductQuantity();
+			
+			/*
+			 * Check if amount which comes from user 
+			 * is lesser than the amount in DB
+			 */ 
+			if(quantity < quantityInDb) {
+				
+				Float quntityRes = quantityInDb - quantity;
+				
+				meat.setProductQuantity(quntityRes);
+				mService.updateQuantity(meat);
+				
+				res.put("fruitsAndVegs", meat);
+				res.put("status", 0);
+
+			} else {
+				res.put("msg", "You don't have enough product");
+			}
+			
+		}catch (Exception e) {
+			
+			res.put("status", 1);
+			res.put("msg", "Somethig went wrong! \\n There is an exception");
+		}
+		
+		return res;
+	}
+
 	
 	/* Get All Meat */
 	@GetMapping("/getAllMeat")
