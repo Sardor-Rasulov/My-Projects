@@ -8,4 +8,8 @@ import com.example.project.entity.FruitsAndVegetables;
 @Repository
 public interface FruitsAndVegsRepository extends CrudRepository<FruitsAndVegetables, Long>{
 
+	void save(Long productQuantity);
+
+	
+	
 }

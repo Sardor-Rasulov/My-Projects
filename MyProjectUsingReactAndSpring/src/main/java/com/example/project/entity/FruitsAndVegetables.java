@@ -25,7 +25,7 @@ public class FruitsAndVegetables {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String productName;
-	private String productQuantity;
+	private Float productQuantity;
 	private String purchaseDate;
 	private String expirationDate;
 	
