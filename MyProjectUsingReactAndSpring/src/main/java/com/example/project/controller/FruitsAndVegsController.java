@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.entity.FruitsAndVegetables;
+import com.example.project.entity.Meat;
 import com.example.project.service.FruitsAndVegsService;
 
 
@@ -25,17 +27,31 @@ public class FruitsAndVegsController {
 	public FruitsAndVegsService fAndvService;
 	
 	@PostMapping("/addFruitsAndVegs")
-	public Map<String, Object> addMeat(@RequestBody FruitsAndVegetables frutAndVegs) {
+	public Map<String, Object> addMeat(@RequestBody FruitsAndVegetables fruitAndVegs) {
 		
 		Map<String, Object> res = new HashMap<>();
 		FruitsAndVegetables fAndV = new FruitsAndVegetables();
 		
 		try {
-			fAndV = fAndvService.addFruitsAndVegs(frutAndVegs);
+			//Check if meat section is full 
+			ArrayList<FruitsAndVegetables> getFruitsAndVegs = (ArrayList<FruitsAndVegetables>) fAndvService.getAllFruitsAndVegs();
+			float total = 0;
+			for(FruitsAndVegetables loopProducts : getFruitsAndVegs) {
+				total = total + loopProducts.getProductQuantity();
+			}
 			
-			res.put("fruits and vegetables", fAndV);
+			/*
+			 * Before adding, check if there is a place in the fridge
+			 */			
+			float sum = total + fruitAndVegs.getProductQuantity();
+			if(sum <= 30) {
+			FruitsAndVegetables pFV = fAndvService.addFruitsAndVegs(fruitAndVegs);
+			res.put("meat", pFV);
 			//if the request was fine status 0 will be sent to the client
 			res.put("status", 0); 
+			} else {
+				res.put("status", "Fruits/Vegitables Section is Full. \n" + " Please empty it first");
+			}
 			
 		}catch(Exception e) {
 			res.put("status", 1);
@@ -81,6 +97,7 @@ public class FruitsAndVegsController {
 				res.put("status", 0);
 
 			} else {
+				res.put("status", 3);
 				res.put("msg", "You don't have enough product");
 			}
 			
