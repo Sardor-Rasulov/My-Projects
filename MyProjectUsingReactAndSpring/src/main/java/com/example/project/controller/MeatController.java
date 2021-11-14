@@ -35,6 +35,7 @@ public class MeatController {
 			//Check if meat section is full 
 			ArrayList<Meat> getProducts = (ArrayList<Meat>) mService.getAllMeatProducts();
 			float total = 0;
+			
 			for(Meat loopProducts : getProducts) {
 				total = total + loopProducts.getProductQuantity();
 			}
@@ -43,22 +44,30 @@ public class MeatController {
 			 * Before adding, check if there is a place in the fridge
 			 */			
 			float sum = total + meat.getProductQuantity();
+			
 			if(sum <= 30) {
 			Meat pMeat = mService.addMeat(meat);
 			res.put("meat", pMeat);
+			
 			//if the request was fine status 0 will be sent to the client
 			res.put("status", 0); 
+			
 			} else {
+				
 				res.put("status", "Meat Section is Full. \n" + " Please empty it first");
+			
 			}
 		  
 		}catch(Exception e) {
+			
 			res.put("status", 1);
 			res.put("msg", "Somethig went wrong! \n There is an exception");
+		
 		}
 		
 		return res;
 	}
+	
 	
 	/* Update product quantity */
 	@PostMapping("/updateMeatQuantity")
@@ -89,13 +98,17 @@ public class MeatController {
 				res.put("status", 0);
 
 			} else {
+				
+				res.put("status", 3);
 				res.put("msg", "You don't have enough product");
+
 			}
 			
 		}catch (Exception e) {
 			
 			res.put("status", 1);
 			res.put("msg", "Somethig went wrong! \\n There is an exception");
+
 		}
 		
 		return res;

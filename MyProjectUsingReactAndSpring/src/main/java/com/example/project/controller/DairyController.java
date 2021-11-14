@@ -80,7 +80,10 @@ public class DairyController {
 				res.put("status", 0);
 
 			} else {
+				
+				res.put("status", 3);
 				res.put("msg", "You don't have enough product");
+				
 			}
 			
 		}catch (Exception e) {
