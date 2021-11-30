@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project.entity.Dairy;
-import com.example.project.entity.FruitsAndVegetables;
 import com.example.project.repository.DairyRepository;
 
 @Service
@@ -33,5 +32,11 @@ public class DairyService {
 	/* Get All Dairy */
 	public Iterable<Dairy> getAllDairyProducts(){
 		return dRepo.findAll();
+	}
+	
+	/* Delete expired product */
+	public void deleteExpiredProduct(Long id) {
+		dRepo.deleteById(id);
+		
 	}
 }

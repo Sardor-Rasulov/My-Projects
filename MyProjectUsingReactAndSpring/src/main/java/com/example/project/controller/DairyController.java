@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.entity.Dairy;
-import com.example.project.entity.FruitsAndVegetables;
 import com.example.project.service.DairyService;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "http://localhost:3001/")
 @RestController
 @RequestMapping(value="/api/v1/")
 public class DairyController {
@@ -101,4 +102,16 @@ public class DairyController {
 	public Iterable<Dairy> getAllDairy(){
 		return dService.getAllDairyProducts();
 	}
+	
+	//Delete expired product		
+	@GetMapping("/deleteDairyProduct")
+	public ResponseEntity<?> remove(@RequestParam(name="id") Long id) {
+	  try{
+		  dService.deleteExpiredProduct(Long.valueOf(id)); 
+	    return ResponseEntity.ok("Product Saccessfully Deleted");      
+	   }
+	   catch (EmptyResultDataAccessException e){
+	      return ResponseEntity.notFound().build();
+	  }                                
+	 }
 }
