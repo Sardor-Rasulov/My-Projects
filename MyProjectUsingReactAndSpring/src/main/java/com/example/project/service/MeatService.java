@@ -3,7 +3,6 @@ package com.example.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.project.entity.Dairy;
 import com.example.project.entity.Meat;
 import com.example.project.repository.MeatReapository;
 
@@ -33,4 +32,8 @@ public class MeatService {
 		mRepo.save(productQuantity);
 	}
 	
+	/* Delete expired product */
+	public void deleteExpiredProduct(Long id) {
+		mRepo.deleteById(id);
+	}
 }

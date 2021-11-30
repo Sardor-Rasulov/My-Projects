@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,13 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.entity.FruitsAndVegetables;
-import com.example.project.entity.Meat;
 import com.example.project.service.FruitsAndVegsService;
 
 
 @RestController
 @RequestMapping(value="/api/v1/")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "http://localhost:3001/")
 public class FruitsAndVegsController {
 	
 	@Autowired
@@ -30,7 +31,6 @@ public class FruitsAndVegsController {
 	public Map<String, Object> addMeat(@RequestBody FruitsAndVegetables fruitAndVegs) {
 		
 		Map<String, Object> res = new HashMap<>();
-		FruitsAndVegetables fAndV = new FruitsAndVegetables();
 		
 		try {
 			//Check if meat section is full 
@@ -109,5 +109,17 @@ public class FruitsAndVegsController {
 		
 		return res;
 	}
+	
+	//Delete expired product		
+	@GetMapping("/deleteProduct")
+	public ResponseEntity<?> remove(@RequestParam(name="id") Long id) {
+	  try{
+	    fAndvService.deleteExpiredProduct(Long.valueOf(id)); 
+	    return ResponseEntity.ok("Product Saccessfully Deleted");      
+	   }
+	   catch (EmptyResultDataAccessException e){
+	      return ResponseEntity.notFound().build();
+	  }                                
+	 }
 	
 }

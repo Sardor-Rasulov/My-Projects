@@ -32,4 +32,10 @@ public class FruitsAndVegsService {
 	public void updateQuantity(FruitsAndVegetables productQuantity) {
 		fvRepo.save(productQuantity);
 	}
+	
+	/* Delete expired product */
+	public void deleteExpiredProduct(Long id) {
+		fvRepo.deleteById(id);
+		
+	}
 }
